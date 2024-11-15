@@ -115,7 +115,7 @@ def preprocess_twin(input_img, validation_img, label):
     return(preprocess_img(input_img), preprocess_img(validation_img), label)
 
 
-def preprocess_data():
+def preprocess_data(batch_size=300):
     anchor = tf.data.Dataset.list_files(ANC_PATH+'\*.jpg').take(3000)
     positive = tf.data.Dataset.list_files(POS_PATH+'\*.jpg').take(3000)
     negative = tf.data.Dataset.list_files(NEG_PATH+'\*.jpg').take(3000)
@@ -129,12 +129,12 @@ def preprocess_data():
     data = data.shuffle(buffer_size=10000)
 
     train_data = data.take(round(len(data)*.7))
-    train_data = train_data.batch(16)
+    train_data = train_data.batch(batch_size)
     train_data = train_data.prefetch(8)
 
     test_data = data.skip(round(len(data)*.7))
     test_data = test_data.take(round(len(data)*.3))
-    test_data = test_data.batch(16)
+    test_data = test_data.batch(batch_size)
     test_data = test_data.prefetch(8)
     return train_data, test_data
 
@@ -145,5 +145,5 @@ if __name__ == "__main__":
     # get_anchor_positive_data()
     # image_augmentation(POS_PATH)
     # image_augmentation(ANC_PATH)
-    train_data, test_data = preprocess_data()
+    train_data, test_data = preprocess_data(16)
 

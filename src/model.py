@@ -41,9 +41,6 @@ class L1Dist(Layer):
         validation_embedding = validation_embedding[0] if isinstance(validation_embedding, list) else validation_embedding
         return tf.math.abs(input_embedding - validation_embedding)
     
-    def compute_output_shape(self, input_shape):
-        return input_shape[0]
-    
 
 def make_siamese_model(input_size, embedding): 
     
